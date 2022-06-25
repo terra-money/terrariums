@@ -1,20 +1,20 @@
-# terrarium.js
+# terrariums
 
 A simple set of utilities for writing deployment and test scripts for Terra projects.
 
-Terrarium provides an object for easily interacting with smart contracts within a project, allowing for easy deployment workflows with inter-contract dependencies and even easy end-to-end testing. In your scripts, you can reference contracts by name and Terrarium will automatically fill in addresses and source code paths from the configuration file and from a synced `refs.json` file, which contains information about each contract by network.
+Terrariums provides an interface for easily interacting with smart contracts within a project, allowing for easy deployment workflows with inter-contract dependencies and even easy end-to-end testing. In your scripts, you can reference contracts by name and Terrarium will automatically fill in addresses and source code paths from the configuration file and from a synced `refs.json` file, which contains information about each contract by network.
 
 ## Setup
 
-1. Add the `terrarium.js` package to your project using the package manager of your choice.
+1. Add the `terrariums` package to your project using the package manager of your choice.
 2. Create a `terrarium.json` configuration file in your project root. See below for a template.
 
 ## Examples
 
-We can use terrarium.js to deploy a smart contract with dynamic arguments:
+We can use terrariums to deploy a smart contract with dynamic arguments:
 
 ```ts
-import { task, Client } from "terrarium.js";
+import { task, Client } from "terrariums";
 
 task(async (client: Client) => {
   let contract1Address = client.refs.getContract(
