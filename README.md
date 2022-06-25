@@ -32,7 +32,7 @@ task(async (client: Client) => {
 
 This can be run by adding the script to your `package.json`:
 
-```json
+```js
 "scripts": {
     "deploy": "ts-node scripts/deploy.ts", // We can also just use node, but we lose type annotations
     ...
