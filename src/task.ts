@@ -1,32 +1,9 @@
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-import {
-  Config, loadConfig, NetworkInfo, SignerInfo,
-} from './config.js';
-import { Client } from './client.js';
-import { LOCALTERRA_MNEMONICS } from './utils.js';
-import { error } from './cli.js';
+import { Config, loadConfig, NetworkInfo, SignerInfo } from "./config.js";
+import { Client } from "./client.js";
+import { cliOptions, LOCALTERRA_MNEMONICS } from "./utils.js";
+import { error } from "./log.js";
 
-async function setupEnv(): Promise<Client> {
-  const argv = await yargs(hideBin(process.argv))
-    .option('config', {
-      alias: 'c',
-      describe: 'config file',
-      default: './terrarium.json',
-    })
-    .option('network', {
-      alias: 'n',
-      describe: 'network to use',
-      default: 'localterra',
-      choices: ['localterra', 'testnet', 'mainnet'],
-      type: 'string',
-    })
-    .option('signer', {
-      alias: 's',
-      describe: 'signer to use',
-      default: 'test1',
-    }).argv;
-
+export async function setupEnv(argv: any): Promise<Client> {
   const config: Config = loadConfig(argv.config);
 
   if (!config.networks[argv.network]) {
@@ -36,8 +13,8 @@ async function setupEnv(): Promise<Client> {
   // Load signer information, with localterra special cases.
   let { signer } = argv;
   if (
-    argv.network === 'localterra'
-    && Object.keys(LOCALTERRA_MNEMONICS).includes(argv.signer)
+    argv.network === "localterra" &&
+    Object.keys(LOCALTERRA_MNEMONICS).includes(argv.signer)
   ) {
     signer = LOCALTERRA_MNEMONICS[argv.signer];
   } else {
@@ -48,7 +25,7 @@ async function setupEnv(): Promise<Client> {
     if (signerInfo.network && signerInfo.network !== argv.network) {
       error(
         `Signer ${argv.signer} is for network ${signerInfo.network}, not ${argv.network}`,
-        { exit: 1 },
+        { exit: 1 }
       );
     }
     signer = signerInfo.mnemonic;
@@ -63,7 +40,9 @@ async function setupEnv(): Promise<Client> {
 }
 
 /* eslint-disable no-unused-vars */
-export default async function task(fn: (client: Client) => Promise<any>): Promise<any> {
-  const client = await setupEnv();
+export default async function task(
+  fn: (client: Client) => Promise<any> | any
+): Promise<any> {
+  const client = await setupEnv(await cliOptions.argv);
   return fn(client);
 }

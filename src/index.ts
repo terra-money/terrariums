@@ -1,7 +1,7 @@
 export { default } from './task.js';
 export {
   info, error, warn, waitKey,
-} from './cli.js';
+} from './log.js';
 export { Client, LCDClientOptions } from './client.js';
 
 export { ContractInfo, Refs } from './refs.js';

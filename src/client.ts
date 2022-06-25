@@ -22,7 +22,7 @@ import ora from "ora";
 import { waitForInclusionInBlock } from "./utils.js";
 import { loadRefs, Refs } from "./refs.js";
 import { Config } from "./config.js";
-import { error, info, waitKey } from "./cli.js";
+import { error, info, waitKey } from "./log.js";
 
 export type LCDClientOptions = LCDClientConfig & {
   mnemonic: string;

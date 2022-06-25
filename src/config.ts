@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { error } from './cli.js';
+import { error } from './log.js';
 
 export interface NetworkInfo {
   chainID: string;
@@ -25,6 +25,8 @@ export interface Config {
   contracts: {
     [contract: string]: {
         src: string;
+        deploy_script?: string;
+        instantiate_msg?: string;
     }
   }
 }

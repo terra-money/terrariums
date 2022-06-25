@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { error, warn } from "./cli.js";
+import { error, warn } from "./log.js";
 
 export interface ContractInfo {
   codeId?: string;
