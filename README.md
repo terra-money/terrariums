@@ -17,7 +17,7 @@ We can use terrariums to deploy a smart contract with dynamic arguments:
 import task, { Client } from "terrariums";
 
 task(async (client: Client) => {
-  let contract1Address = client.refs.getContract(
+  let contract1Info = client.refs.getContract(
     client.network,
     "contract1Address"
   );
@@ -26,7 +26,7 @@ task(async (client: Client) => {
   client.optimizeContract("contract2");
 
   await client.storeCode("contract2");
-  await client.instantiate("contract2", { addr_for_contract1: contract1Address });
+  await client.instantiate("contract2", { addr_for_contract1: contract1Info.address });
 });
 ```
 
