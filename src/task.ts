@@ -65,5 +65,5 @@ async function setupEnv(): Promise<Client> {
 /* eslint-disable no-unused-vars */
 export default async function task(fn: (client: Client) => Promise<any>): Promise<any> {
   const client = await setupEnv();
-  return await fn(client);
+  return fn(client);
 }

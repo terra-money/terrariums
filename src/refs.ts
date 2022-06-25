@@ -1,9 +1,9 @@
-import * as fs from 'fs';
-import { error, warn } from './cli.js';
+import * as fs from "fs";
+import { error, warn } from "./cli.js";
 
 export interface ContractInfo {
-  codeId: string;
-  address: string;
+  codeId?: string;
+  address?: string;
 }
 
 export interface refs {
@@ -31,7 +31,7 @@ export class Refs {
     return this.refs[network][contract];
   }
 
-  getCodeId(network: string, contract: string): string {
+  getCodeId(network: string, contract: string): string | undefined {
     if (!this.refs[network]) {
       error(`Network ${network} not found in refs`, { exit: 1 });
     }
@@ -45,17 +45,15 @@ export class Refs {
 
   setCodeId(network: string, contract: string, codeId: string) {
     if (!this.refs[network]) {
-      error(`Network ${network} not found in refs`, { exit: 1 });
+      this.refs[network] = {};
     }
     if (!this.refs[network][contract]) {
-      error(`Contract ${contract} not found for network ${network}`, {
-        exit: 1,
-      });
+      this.refs[network][contract] = {};
     }
     this.refs[network][contract].codeId = codeId;
   }
 
-  getAddress(network: string, contract: string): string {
+  getAddress(network: string, contract: string): string | undefined {
     if (!this.refs[network]) {
       error(`Network ${network} not found in refs`, { exit: 1 });
     }
@@ -69,12 +67,10 @@ export class Refs {
 
   setAddress(network: string, contract: string, address: string) {
     if (!this.refs[network]) {
-      error(`Network ${network} not found in refs`, { exit: 1 });
+      this.refs[network] = {};
     }
     if (!this.refs[network][contract]) {
-      error(`Contract ${contract} not found for network ${network}`, {
-        exit: 1,
-      });
+      this.refs[network][contract] = {};
     }
     this.refs[network][contract].address = address;
   }
@@ -93,6 +89,6 @@ export function loadRefs(basePath: string): Refs {
     fs.writeFileSync(basePath, JSON.stringify({}, null, 2));
     return new Refs({});
   }
-  const refs = JSON.parse(fs.readFileSync(basePath, 'utf8'));
+  const refs = JSON.parse(fs.readFileSync(basePath, "utf8"));
   return new Refs(refs);
 }

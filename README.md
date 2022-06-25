@@ -14,7 +14,7 @@ Terrariums provides an interface for easily interacting with smart contracts wit
 We can use terrariums to deploy a smart contract with dynamic arguments:
 
 ```ts
-import { task, Client } from "terrariums";
+import task, { Client } from "terrariums";
 
 task(async (client: Client) => {
   let contract1Address = client.refs.getContract(
@@ -25,8 +25,8 @@ task(async (client: Client) => {
   client.buildContract("contract2");
   client.optimizeContract("contract2");
 
-  client.storeCode("contract2");
-  client.instantiate("contract2", { addr_for_contract1: contract1Address });
+  await client.storeCode("contract2");
+  await client.instantiate("contract2", { addr_for_contract1: contract1Address });
 });
 ```
 
