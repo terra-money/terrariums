@@ -1,0 +1,25 @@
+{
+    "networks": {
+        "mainnet": {
+            "chainID": "phoenix-1",
+            "URL": "https://lcd.terra.dev"
+        },
+        "testnet": {
+            "chainID": "pisco-1",
+            "URL": "https://pisco-lcd.terra.dev"
+        },
+        "localterra": {
+            "chainID": "localterra",
+            "URL": "http://localhost:1317"
+        }
+    },
+    "refs": {
+        "base_path": "./refs.json",
+        "copy_refs_to": []
+    },
+    "contracts": {
+        "example_contract": {
+            "src": "./contracts/example_contract/"
+        }
+    }
+}
