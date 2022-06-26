@@ -64,9 +64,9 @@ optimize = "..."
 
 Stores the contract's WASM bytecode in the to the network specified by the `--network` or `-n` flag, using the signer specified by the `--signer` or `-s` flag. Returns the resulting code ID, and updates the `refs` file specified by your `terrarium.json` config.
 
-### `instantiate(contract: string, msg: Object, ...): Promise<string>`
+### `instantiate(contract: string, msg: Object, ...): Promise<{ address: string; raw_log: string }>`
 
-Instantiates the contract with the given `InstantiateMsg`. The message is JSON-encoded and sent to the network specified by the `--network` or `-n` flag, using the signer specified by the `--signer` or `-s` flag. Additional arguments can be passed to the `InstantiateMsg`. Returns the resulting contract address, and updates the `refs` file specified by your `terrarium.json` config.
+Instantiates the contract with the given `InstantiateMsg`. The message is JSON-encoded and sent to the network specified by the `--network` or `-n` flag, using the signer specified by the `--signer` or `-s` flag. Additional arguments can be passed to the `InstantiateMsg`. Returns the resulting and transaction logs in the object `{address: string, raw_logs:string}`, and updates the `refs` file specified by your `terrarium.json` config.
 
 ### `execute(contract: string, msg: Object, ...): Promise<WaitTxBroadcastResult>`
 

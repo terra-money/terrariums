@@ -45,7 +45,9 @@ if (argv._[0] === "deploy") {
     }
     let child = fork(path.join(process.cwd(), buildInfo.deploy_script), {
       env: process.env,
-      execArgv: ["-r", "ts-node/register"],
+      execArgv: buildInfo.deploy_script.endsWith(".js")
+        ? []
+        : ["--loader", "ts-node/esm"],
     });
     child.on("exit", (code) => {
       if (code !== 0) {
@@ -53,12 +55,14 @@ if (argv._[0] === "deploy") {
       }
     });
   } else if (buildInfo.instantiate_msg) {
-    task((client: Client) => {
+    task(async (client: Client) => {
       client.buildContract(argv.contract);
       client.optimizeContract(argv.contract);
 
-      client.storeCode(argv.contract);
-      client.instantiate(argv.contract, buildInfo.instantiate_msg);
+      await client.storeCode(argv.contract);
+      await client.instantiate(argv.contract, buildInfo.instantiate_msg);
+    }).then(() => {
+      process.exit(0);
     });
   } else {
     error(

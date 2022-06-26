@@ -193,7 +193,7 @@ export class Client extends LCDClient {
     initCoins?: Coins.Input,
     sequence?: number,
     label?: string
-  ): Promise<string> {
+  ): Promise<{ address: string; raw_log: string }> {
     const codeId = this.refs.getCodeId(this.network, contract);
     if (!codeId) {
       error(`Contract ${contract} code id not found in refs.`, {
@@ -286,7 +286,7 @@ export class Client extends LCDClient {
       this.clientConfig.refs.base_path,
       this.clientConfig.refs.copy_refs_to
     );
-    return contractAddress;
+    return { address: contractAddress, raw_log: res!.raw_log };
   }
 
   async query(contract: string, msg: Object) {
