@@ -189,9 +189,9 @@ export class Client extends LCDClient {
   async instantiate(
     contract: string,
     msg: Object,
+    sequence?: number,
     admin?: string,
     initCoins?: Coins.Input,
-    sequence?: number,
     label?: string
   ): Promise<{ address: string; raw_log: string }> {
     const codeId = this.refs.getCodeId(this.network, contract);
@@ -299,6 +299,7 @@ export class Client extends LCDClient {
   async execute(
     contract: string,
     msg: Object,
+    sequence?: number,
     logMessage?: string,
     coins?: Coins.Input,
     options?: CreateTxOptions
@@ -306,6 +307,7 @@ export class Client extends LCDClient {
     const contractAddress = contract.startsWith("terra1")
       ? contract
       : this.refs.getContract(this.network, contract).address;
+    const manualSequence = sequence || (await this.signer.sequence());
     const msgs = [
       new MsgExecuteContract(
         this.signer.key.accAddress,
@@ -314,7 +316,9 @@ export class Client extends LCDClient {
         coins
       ),
     ];
-    const mergedOptions = options ? { ...options, msgs } : { msgs };
+    const mergedOptions = options
+      ? { ...options, msgs, sequence: manualSequence }
+      : { msgs, sequence: manualSequence };
     const action = ora({
       text: logMessage || `Executing contract ${contract}`,
       spinner: "dots",

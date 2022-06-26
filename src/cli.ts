@@ -9,6 +9,7 @@ import * as fs from "fs";
 import path from "path";
 import task from "./task.js";
 import { Client } from "./client.js";
+import { hideBin } from "yargs/helpers";
 
 let argv: any = await cliOptions
   .command("deploy <contract>", "Deploy a contract", (yargs) => {
@@ -43,7 +44,8 @@ if (argv._[0] === "deploy") {
     if (!fs.existsSync(path.join(process.cwd(), buildInfo.deploy_script))) {
       error(`Deploy script ${buildInfo.deploy_script} not found.`, { exit: 1 });
     }
-    let child = fork(path.join(process.cwd(), buildInfo.deploy_script), {
+    let args = hideBin(process.argv);
+    let child = fork(path.join(process.cwd(), buildInfo.deploy_script), args, {
       env: process.env,
       execArgv: buildInfo.deploy_script.endsWith(".js")
         ? []
@@ -60,6 +62,7 @@ if (argv._[0] === "deploy") {
       client.optimizeContract(argv.contract);
 
       await client.storeCode(argv.contract);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       await client.instantiate(argv.contract, buildInfo.instantiate_msg);
     }).then(() => {
       process.exit(0);
