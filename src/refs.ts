@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import { error, warn } from "./log.js";
+import * as fs from 'fs';
+import { error, warn } from './log.js';
 
 export interface ContractInfo {
   codeId?: string;
@@ -89,6 +89,6 @@ export function loadRefs(basePath: string): Refs {
     fs.writeFileSync(basePath, JSON.stringify({}, null, 2));
     return new Refs({});
   }
-  const refs = JSON.parse(fs.readFileSync(basePath, "utf8"));
+  const refs = JSON.parse(fs.readFileSync(basePath, 'utf8'));
   return new Refs(refs);
 }

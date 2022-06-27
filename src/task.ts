@@ -41,8 +41,14 @@ export async function setupEnv(argv: any): Promise<Client> {
 
 /* eslint-disable no-unused-vars */
 export default async function task(
-  fn: (client: Client) => Promise<any> | any
+  fn: (client: Client) => Promise<any> | any,
+  exit: boolean = true
 ): Promise<any> {
   const client = await setupEnv(await cliOptions.argv);
-  return fn(client);
+  return fn(client).then((result) => {
+    if (exit) {
+      process.exit(0);
+    }
+    return result;
+  });
 }

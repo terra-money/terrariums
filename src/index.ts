@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-exports */
 export { default } from './task.js';
 export {
   info, error, warn, waitKey,
