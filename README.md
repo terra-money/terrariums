@@ -14,67 +14,26 @@ Terrariums provides an interface for easily interacting with smart contracts wit
 We can use terrariums to deploy a smart contract with dynamic arguments:
 
 ```ts
-import task, { Client } from "terrariums";
+import task, { Deployer, Executor, Signer, Refs } from "terrariums";
 
-task(async (client: Client) => {
-  let contract1Info = client.refs.getContract(
-    client.network,
-    "contract1Address"
+task(async ({deployer, executor, signer, refs, network}) => {
+  //Fetch information about "contract1" from the saved refs.json file:
+  let contract1Info = refs.getContract(
+    network, //The current network that was selected by the CLI options (--network testnet, for example)
+    "contract1"
   );
+  //Then we can deploy a contract, "contract2", which references the currently deployed :
+  deployer.buildContract("contract2");
+  deployer.optimizeContract("contract2");
 
-  client.buildContract("contract2");
-  client.optimizeContract("contract2");
-
-  await client.storeCode("contract2");
-  await client.instantiate("contract2", { addr_for_contract1: contract1Info.address });
+  await deployer.storeCode("contract2");
+  await deployer.instantiate("contract2", { addr_for_contract1: contract1Info.address });
+  //Now we can execute "contract2":
+  await executor.execute("contract2", { test_contract_call: { message: "Hello World" } });
 });
 ```
 
-This can be run by adding the script to your `package.json`:
-
-```js
-"scripts": {
-    "deploy": "ts-node scripts/deploy.ts", // We can also just use node, but we lose type annotations
-    ...
-}
-```
-
-And then running `yarn` or `npm`:
-
-```sh
-yarn run deploy --network testnet --signer test2
-```
-
-## Client API
-
-### `buildContract(contract: string)`
-
-Runs `cargo wasm` for the given contract. The build directory for the contract is specified in your `terrarium.json` file.
-
-### `optimizeContract(contract: string)`
-
-Runs the `cosmwasm/rust-optimizer` tool for the given contract. If the contract's `Cargo.toml` has an entry like below, it will run that instead:
-
-```toml
-[package.metadata.scripts]
-optimize = "..."
-```
-
-### `storeCode(contract: string): Promise<string>`
-
-Stores the contract's WASM bytecode in the to the network specified by the `--network` or `-n` flag, using the signer specified by the `--signer` or `-s` flag. Returns the resulting code ID, and updates the `refs` file specified by your `terrarium.json` config.
-
-### `instantiate(contract: string, msg: Object, ...): Promise<{ address: string; raw_log: string }>`
-
-Instantiates the contract with the given `InstantiateMsg`. The message is JSON-encoded and sent to the network specified by the `--network` or `-n` flag, using the signer specified by the `--signer` or `-s` flag. Additional arguments can be passed to the `InstantiateMsg`. Returns the resulting and transaction logs in the object `{address: string, raw_logs:string}`, and updates the `refs` file specified by your `terrarium.json` config.
-
-### `execute(contract: string, msg: Object, ...): Promise<WaitTxBroadcastResult>`
-
-Executes the contract with the given `ExecuteMsg`. The message is JSON-encoded and sent to the network specified by the `--network` or `-n` flag, using the signer specified by the `--signer` or `-s` flag. Additional arguments can be passed to the `ExecuteMsg`. Returns the resulting tx object.
-
-### `query(contract: string, msg: Object): Promise<Object>`
-
-Queries the contract with the given `QueryMsg`. The message is JSON-encoded and sent to the network specified by the `--network` or `-n` flag. Returns the query result.
+It's possible add scripts as default deployment scripts for a specific contract by specifying it in the `terrarium.json` file.
 
 ## Configuration
 
@@ -102,7 +61,8 @@ Here is a template for the `terrarium.json` configuration file:
   },
   "contracts": {
     "example_contract": {
-      "src": "./contracts/example_contract/"
+      "src": "./contracts/example_contract/",
+      "deploy_script": "./tasks/deploy_script_example.ts"
     }
   }
 }
