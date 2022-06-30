@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { error, warn } from './log.js';
+import { warn } from './log.js';
 
 export interface ContractInfo {
   codeId?: string;
@@ -21,24 +21,20 @@ export class Refs {
 
   getContract(network: string, contract: string): ContractInfo {
     if (!this.refs[network]) {
-      error(`Network ${network} not found in refs`, { exit: 1 });
+      throw new Error(`Network ${network} not found in refs`);
     }
     if (!this.refs[network][contract]) {
-      error(`Contract ${contract} not found for network ${network}`, {
-        exit: 1,
-      });
+      throw new Error(`Contract ${contract} not found for network ${network}`);
     }
     return this.refs[network][contract];
   }
 
   getCodeId(network: string, contract: string): string | undefined {
     if (!this.refs[network]) {
-      error(`Network ${network} not found in refs`, { exit: 1 });
+      throw new Error(`Network ${network} not found in refs`);
     }
     if (!this.refs[network][contract]) {
-      error(`Contract ${contract} not found for network ${network}`, {
-        exit: 1,
-      });
+      throw new Error(`Contract ${contract} not found for network ${network}`);
     }
     return this.getContract(network, contract).codeId;
   }
@@ -55,12 +51,10 @@ export class Refs {
 
   getAddress(network: string, contract: string): string | undefined {
     if (!this.refs[network]) {
-      error(`Network ${network} not found in refs`, { exit: 1 });
+      throw new Error(`Network ${network} not found in refs`);
     }
     if (!this.refs[network][contract]) {
-      error(`Contract ${contract} not found for network ${network}`, {
-        exit: 1,
-      });
+      throw new Error(`Contract ${contract} not found for network ${network}`);
     }
     return this.getContract(network, contract).address;
   }

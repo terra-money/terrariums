@@ -14,21 +14,21 @@ export interface SignerInfo {
 export interface Config {
   networks: {
     [network: string]: NetworkInfo;
-  },
+  };
   refs: {
     base_path: string;
     copy_refs_to?: string[];
-  },
+  };
   signers?: {
     [signer: string]: SignerInfo;
-  },
+  };
   contracts: {
     [contract: string]: {
-        src: string;
-        deploy_script?: string;
-        instantiate_msg?: string;
-    }
-  }
+      src: string;
+      deploy_script?: string;
+      instantiate_msg?: string;
+    };
+  };
 }
 
 export function loadConfig(configPath: string): Config {
@@ -37,4 +37,26 @@ export function loadConfig(configPath: string): Config {
   }
   const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   return config;
+}
+
+export function defaultNetworkInfo(network: string): NetworkInfo {
+  switch (network) {
+    case 'localterra':
+      return {
+        chainID: 'localterra',
+        URL: 'http://localhost:1317',
+      };
+    case 'testnet':
+      return {
+        chainID: 'pisco-1',
+        URL: 'https://pisco-lcd.terra.dev',
+      };
+    case 'mainnet':
+      return {
+        chainID: 'phoenix-1',
+        URL: 'https://lcd.terra.dev',
+      };
+    default:
+      throw new Error(`Unknown network ${network}`);
+  }
 }
