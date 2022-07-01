@@ -16,7 +16,7 @@ export interface refs {
 export class Refs {
   refs: refs;
 
-  private config?: Config;
+  protected config?: Config;
 
   constructor(refInfo: refs, config?: Config) {
     this.refs = refInfo;

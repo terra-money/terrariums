@@ -32,13 +32,13 @@ export type InstantiateContractOptions = {
 };
 
 export class Deployer {
-  private network: string;
+  protected network: string;
 
-  private config: Config;
+  protected config: Config;
 
-  private signer: Wallet;
+  protected signer: Wallet;
 
-  private refs: Refs;
+  protected refs: Refs;
 
   constructor(options: DeployerOptions) {
     this.network = options.network;

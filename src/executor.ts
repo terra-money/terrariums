@@ -21,11 +21,11 @@ export type ExecuteContractOptions = {
 };
 
 export class Executor {
-  private network: string;
+  protected network: string;
 
-  private signer: Wallet;
+  protected signer: Wallet;
 
-  private refs: Refs;
+  protected refs: Refs;
 
   constructor(options: ExecutorOptions) {
     this.network = options.network;
