@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { Config } from './config.js';
 import { warn } from './log.js';
 
 export interface ContractInfo {
@@ -15,8 +16,11 @@ export interface refs {
 export class Refs {
   refs: refs;
 
-  constructor(refInfo: refs) {
+  private config?: Config;
+
+  constructor(refInfo: refs, config?: Config) {
     this.refs = refInfo;
+    this.config = config;
   }
 
   getContract(network: string, contract: string): ContractInfo {
@@ -69,7 +73,23 @@ export class Refs {
     this.refs[network][contract].address = address;
   }
 
-  saveRefs(path: string, copyTo?: string[]) {
+  saveRefs() {
+    if (!this.config) {
+      throw new Error(
+        'No configuration data provided, use saveRefsTo() instead',
+      );
+    }
+
+    fs.writeFileSync(
+      this.config.refs.base_path,
+      JSON.stringify(this.refs, null, 2),
+    );
+    (this.config.refs.copy_refs_to || []).forEach((dest) => {
+      fs.copyFileSync(this.config.refs.base_path, dest);
+    });
+  }
+
+  saveRefsTo(path: string, copyTo?: string[]) {
     fs.writeFileSync(path, JSON.stringify(this.refs, null, 2));
     (copyTo || []).forEach((dest) => {
       fs.copyFileSync(path, dest);
@@ -77,7 +97,7 @@ export class Refs {
   }
 }
 
-export function loadRefs(basePath: string): Refs {
+export function loadRefsFromFile(basePath: string): Refs {
   if (!fs.existsSync(basePath)) {
     warn(`Refs file not found at ${basePath}, creating new one`);
     fs.writeFileSync(basePath, JSON.stringify({}, null, 2));
@@ -85,4 +105,9 @@ export function loadRefs(basePath: string): Refs {
   }
   const refs = JSON.parse(fs.readFileSync(basePath, 'utf8'));
   return new Refs(refs);
+}
+
+export function loadRefs(config: Config): Refs {
+  const refs = loadRefsFromFile(config.refs.base_path);
+  return new Refs(refs.refs, config);
 }

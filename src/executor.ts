@@ -4,9 +4,9 @@ import {
   MsgExecuteContract,
   WaitTxBroadcastResult,
   Wallet,
-} from "@terra-money/terra.js";
-import ora, { Ora } from "ora";
-import { Refs } from "./refs.js";
+} from '@terra-money/terra.js';
+import ora, { Ora } from 'ora';
+import { Refs } from './refs.js';
 
 export type ExecutorOptions = {
   network: string;
@@ -34,7 +34,7 @@ export class Executor {
   }
 
   async query(contract: string, msg: Object) {
-    const contractAddress = contract.startsWith("terra1")
+    const contractAddress = contract.startsWith('terra1')
       ? contract
       : this.refs.getContract(this.network, contract).address;
     return this.signer.lcd.wasm.contractQuery(contractAddress, msg);
@@ -44,9 +44,9 @@ export class Executor {
     contract: string,
     msg: Object,
     options?: ExecuteContractOptions,
-    spinner: Ora | undefined = ora({ spinner: "dots" })
+    spinner: Ora | undefined = ora({ spinner: 'dots' }),
   ): Promise<WaitTxBroadcastResult> {
-    const contractAddress = contract.startsWith("terra1")
+    const contractAddress = contract.startsWith('terra1')
       ? contract
       : this.refs.getContract(this.network, contract).address;
     const manualSequence = options?.sequence || (await this.signer.sequence());
@@ -55,14 +55,14 @@ export class Executor {
         this.signer.key.accAddress,
         contractAddress,
         msg,
-        options?.coins
+        options?.coins,
       ),
     ];
     const mergedOptions = options?.txOptions
       ? { ...options!.txOptions, msgs, sequence: manualSequence }
       : { msgs, sequence: manualSequence };
 
-    spinner?.start("Executing contract with message: " + JSON.stringify(msg));
+    spinner?.start(`Executing contract with message: ${JSON.stringify(msg)}`);
     const tx = await this.signer.createAndSignTx(mergedOptions);
     const logs = await this.signer.lcd.tx.broadcast(tx);
     spinner?.succeed(`Executed contract with message: ${JSON.stringify(msg)}`);

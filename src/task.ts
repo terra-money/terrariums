@@ -1,11 +1,11 @@
-import { LCDClient } from "@terra-money/terra.js";
-import { Config, loadConfig, NetworkInfo } from "./config.js";
-import { cliOptions } from "./utils.js";
-import { error } from "./log.js";
-import { Deployer } from "./deployer.js";
-import { Executor } from "./executor.js";
-import { Signer } from "./signers.js";
-import { loadRefs, Refs } from "./refs.js";
+import { LCDClient } from '@terra-money/terra.js';
+import { Config, loadConfig, NetworkInfo } from './config.js';
+import { cliOptions } from './utils.js';
+import { error } from './log.js';
+import { Deployer } from './deployer.js';
+import { Executor } from './executor.js';
+import { Signer } from './signers.js';
+import { loadRefs, Refs } from './refs.js';
 
 export type Env = {
   deployer: Deployer;
@@ -30,7 +30,7 @@ export async function setupEnv(argv: any): Promise<Env> {
     name: argv.signer,
   });
 
-  const refs = loadRefs(config.refs.base_path);
+  const refs = loadRefs(config);
 
   const deployer = new Deployer({
     network: argv.network,
@@ -56,7 +56,7 @@ export async function setupEnv(argv: any): Promise<Env> {
 /* eslint-disable no-unused-vars */
 export default async function task(
   fn: (env: Env) => Promise<any> | any,
-  exit: boolean = true
+  exit: boolean = true,
 ): Promise<any> {
   const env = await setupEnv(await cliOptions.argv);
   return fn(env)
