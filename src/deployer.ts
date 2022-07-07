@@ -90,7 +90,7 @@ export class Deployer {
       const optimizeCmd = eval(`\`${optimize}\``);
       execSync(optimizeCmd, { stdio: log ? 'inherit' : 'ignore' });
     } else {
-      const arm64 = process.arch === 'arm64';
+      const arm64 = process.arch === 'arm64' && process.env.TERRARIUMS_ARCH_ARM64;
       const image = `cosmwasm/rust-optimizer${arm64 ? '-arm64' : ''}:0.12.5`;
       const dir = platform() === 'win32' ? '%cd%' : '$(pwd)';
       execSync(
@@ -121,8 +121,8 @@ export class Deployer {
 
     const arm64 = process.arch === 'arm64';
     let wasmByteCodeFilename = `${contract.replace(/-/g, '_')}`;
-    if (arm64) {
-      wasmByteCodeFilename += '-arm64';
+    if (arm64 && process.env.TERRARIUMS_ARCH_ARM64) {
+      wasmByteCodeFilename += '-aarch64';
     }
     wasmByteCodeFilename += '.wasm';
 

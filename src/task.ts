@@ -58,6 +58,10 @@ export default async function task(
   fn: (env: Env) => Promise<any> | any,
   exit: boolean = true,
 ): Promise<any> {
+  const argv = await cliOptions.argv;
+  if (argv.arm64) {
+    process.env.TERRARIUM_ARCH_ARM64 = '1';
+  }
   const env = await setupEnv(await cliOptions.argv);
   return fn(env)
     .then((result) => {

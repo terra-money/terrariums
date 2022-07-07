@@ -66,4 +66,10 @@ export const cliOptions = yargs(hideBin(process.argv))
     alias: 's',
     describe: 'signer to use',
     default: 'test1',
+  })
+  .option('arm64', {
+    alias: 'a',
+    describe: 'use arm64 optimizer and ',
+    default: false,
+    type: 'boolean',
   });
