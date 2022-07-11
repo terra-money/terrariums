@@ -29,6 +29,7 @@ export interface Config {
       instantiate_msg?: string;
     };
   };
+  workspace_optimizer?: boolean;
 }
 
 export function loadConfig(configPath: string): Config {
