@@ -35,7 +35,7 @@ export class Signer extends Wallet {
     const regex = new RegExp(`^mnemonic(\.${options.network}$|$)`, 'i');
     const envMnemonic = Object.keys(process.env).find((key) => regex.test(key));
     if (envMnemonic) {
-      return new MnemonicKey({ mnemonic: envMnemonic });
+      return new MnemonicKey({ mnemonic: process.env[envMnemonic] });
     }
 
     if (!options.name) {

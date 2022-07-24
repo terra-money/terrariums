@@ -17,7 +17,7 @@ export type ExecutorOptions = {
 export type ExecuteContractOptions = {
   sequence?: number;
   coins?: Coins.Input;
-  txOptions?: CreateTxOptions;
+  txOptions?: Partial<CreateTxOptions>;
 };
 
 export class Executor {
