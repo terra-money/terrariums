@@ -44,7 +44,7 @@ export class Executor {
     contract: string,
     msg: Object,
     options?: ExecuteContractOptions,
-    spinner: Ora | undefined = ora({ spinner: 'dots' }),
+    spinner: Ora | null = ora({ spinner: 'dots' }),
   ): Promise<WaitTxBroadcastResult> {
     const contractAddress = contract.startsWith('terra1')
       ? contract

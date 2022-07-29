@@ -117,7 +117,7 @@ export class Deployer {
   public async storeCode(
     contract: string,
     migrateCodeId?: number,
-    spinner: Ora | undefined = ora({ spinner: "dots" })
+    spinner: Ora | null = ora({ spinner: "dots" })
   ): Promise<string> {
     if (!this.config.contracts[contract]) {
       throw new Error(
@@ -204,7 +204,7 @@ export class Deployer {
     contract: string,
     msg: Object,
     options?: InstantiateContractOptions,
-    spinner: Ora | undefined = ora({ spinner: "dots" })
+    spinner: Ora | null = ora({ spinner: "dots" })
   ): Promise<{ address: string; raw_log: string }> {
     const codeId = this.refs.getCodeId(this.network, contract);
     if (!codeId) {

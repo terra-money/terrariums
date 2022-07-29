@@ -55,7 +55,7 @@ export function defaultNetworkInfo(network: string): NetworkInfo {
     case 'mainnet':
       return {
         chainID: 'phoenix-1',
-        URL: 'https://lcd.terra.dev',
+        URL: 'https://phoenix-lcd.terra.dev',
       };
     default:
       throw new Error(`Unknown network ${network}`);
