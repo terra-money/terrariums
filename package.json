@@ -1,5 +1,5 @@
 {
-  "name": "terrariums",
+  "name": "@terra-money/terrariums",
   "version": "1.1.9",
   "description": "Deployment and test tools for Terra projects.",
   "author": "Amit Prasad <mail@amitprasad.dev>",
