@@ -59,7 +59,6 @@ export const cliOptions = yargs(hideBin(process.argv))
     alias: 'n',
     describe: 'network to use',
     default: 'localterra',
-    choices: ['localterra', 'testnet', 'mainnet'],
     type: 'string',
   })
   .option('signer', {
