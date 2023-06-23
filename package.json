@@ -6,6 +6,9 @@
   "license": "Apache-2.0",
   "type": "module",
   "main": "lib/src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "types": "lib/src/index.d.ts",
   "bin": "lib/src/cli.js",
   "dependencies": {
